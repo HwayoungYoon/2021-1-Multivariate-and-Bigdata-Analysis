@@ -135,3 +135,25 @@ ds
 dm <- t(st[1,]-st[2,]) %*% solve(S) %*% (st[1,]-st[2,])
 dm <- sqrt(dm)
 dm
+
+
+#####################################
+##### draw ellipse
+
+library(car)
+x1=c(3,4,2,6,8,2); x2=c(5,5,4,7,10,5)
+dataEllipse(x1, x2, levels=c(0.5,0.95), lty=1:2, xlim=c(1,8), ylim=c(1,10))
+
+library(car)
+m=c(4.17,6)
+A= matrix(c(5.77,5,5,4.8), nrow=2)
+plot(c(0,10), c(0,10), type="n", xlab="x", ylab="y")  # empty space 만들기
+ellipse(center=m, shape=A,radius=sqrt(qchisq(.7, df=2)), xlim=c(0,10), ylim=c(1,10)) #타원
+
+ctr<- c(4.17,6)     # ctr : 타원 중심(표본평균)
+A<- matrix(c(5.77,5,5,4.8), nrow=2)    # A : 공분산 행렬
+RR<- chol(A)
+angles <- seq(0, 2*pi, length.out=200)
+ell    <-  cbind(cos(angles), sin(angles)) %*% RR
+ellCtr <- sweep(ell, 2, ctr, "+") 
+plot(ellCtr, type="l", lwd=2, asp=1)
