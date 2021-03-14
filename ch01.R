@@ -9,18 +9,24 @@ setwd("C:/R/Multivariate and Bigdata Analysis")
 dat <- read.csv("data/기상과대기오염.csv", header=T)
 head(dat)
 
-# plot
+# scatter plot
 plot(dat)
 
+# parallel plot
 library(lattice)
 parallelplot(dat, main="parallel graph")
 
-install.packages("aplpack")
+# face plot
 library(aplpack)
 faces(dat[,2:6], main="face plot for cork")
+
+# star graph
+library(aplpack)
 stars(dat[,2:6], labels=dat[,1], main="star graph")
 ## (x,y): 화면에서의 위치 x=1~15
 stars(dat[,2:6], key.loc=c(7.5, 1.5), labels=dat[,1], main="star graph")
+
+# Nightinggale chart
 stars(dat[,2:6], labels=dat[,1], draw.segments=T, main="Nightinggale chart")
 
 
@@ -47,7 +53,7 @@ m; cv; cr
 library(lattice)
 parallelplot(tree, main="parallel graph")
 
-# star m,(그림 1.13)
+# star (그림 1.13)
 stars(cork, labels=tree[,1], main="star graph")
 
 # face plot (그림 1.14)
@@ -121,7 +127,7 @@ S = cov(st)
 R = cor(st)
 mu; S; R
 
-## 1번과 2번 간의 유클리드
+## 1번과 2번 간의 유클리드 거리
 de <- dist(st[1:2,], method="euclidean")
 de
 
