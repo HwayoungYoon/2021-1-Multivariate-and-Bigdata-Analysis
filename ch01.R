@@ -87,16 +87,19 @@ cork
 boxplot(tree$N, tree$E, tree$S, tree$W,
         names=c("North", "East", "South", "West"))
 
-## 1번과 2번 간의 유클리드
-### method = "euclidean", "maximum", "manhattan", "canberra", "binary" or "minkowski"
+# 1번과 2번 간의 유클리드 거리
+## method = "euclidean", "maximum", "manhattan", "canberra", "binary" or "minkowski"
 dist(cork[1:2,], method="euclidean")
 
+# 1번과 2번 간의 표준화 거리
 D <- diag(cv)*diag(4)
 D
 obj12 <- as.matrix(cork[1,]-cork[2,])
 obj12
 dim(obj12)
 ds <- sqrt(obj12 %*% solve(D) %*% t(obj12)); ds
+
+# 1번과 2번 간의 마할라노비스 거리
 dm <- sqrt(obj12 %*% solve(cv) %*% t(obj12)); dm
 
 dim(cork[1,])
@@ -127,17 +130,18 @@ S = cov(st)
 R = cor(st)
 mu; S; R
 
-## 1번과 2번 간의 유클리드 거리
+# 1번과 2번 간의 유클리드 거리
 de <- dist(st[1:2,], method="euclidean")
 de
 
+# 1번과 2번 간의 표준화 거리
 D <- rbind(c(S[1,1], 0), c(0, S[2,2]))
 D
-
 ds <- t(st[1,]-st[2,]) %*% solve(D) %*% (st[1,]-st[2,])
 ds <- sqrt(ds)
 ds
 
+# 1번과 2번 간의 마할라노비스 거리
 dm <- t(st[1,]-st[2,]) %*% solve(S) %*% (st[1,]-st[2,])
 dm <- sqrt(dm)
 dm
