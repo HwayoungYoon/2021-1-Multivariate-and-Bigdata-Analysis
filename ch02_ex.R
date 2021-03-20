@@ -94,16 +94,17 @@ t(B)%*%t(A)
 A <- matrix(c(2,-1,-1,2), nc=2)
 
 # 2.3.a
-A[,1]
-A[,2]
-plot(A[,1], A[,2], xlab="1青", ylab="2青")
-
-# 2.3.b
 A[1,]
 A[2,]
-plot(A[1,], A[2,], xlab="1凯", ylab="2凯")
+plot(A[1,], A[2,], xlab="1青", ylab="2青")
+
+# 2.3.b
+A[,1]
+A[,2]
+plot(A[,1], A[,2], xlab="1凯", ylab="2凯")
 
 # 2.3.c
+dim(A)
 # rank(A)=2
 
 # 2.3.d
@@ -148,7 +149,6 @@ A%*%A
 eigen(A%*%A)
 
 # 2.3.n
-# 2.3.f
 eAA <- eigen(A%*%A)
 eAA1 <- eAA$values[[1]]*eAA$vectors[,1]%*%t(eAA$vectors[,1])
 eAA2 <- eAA$values[[2]]*eAA$vectors[,2]%*%t(eAA$vectors[,2])
@@ -161,6 +161,7 @@ A%*%A
 E <- matrix(c(4,0,0,0,9,0,0,0,1), nc=3)
 
 # 2.4.a
+dim(E)
 # rank(E)=3
 
 # 2.4.b
