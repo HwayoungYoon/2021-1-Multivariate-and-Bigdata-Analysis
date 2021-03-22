@@ -129,6 +129,7 @@ eigen(ginv(A))
 eigen(solve(A))
 
 # 2.3.h
+eigen(A)
 # A의 고유값이 모두 양수이므로 양정치행렬이다
 
 # 2.3.i
@@ -187,6 +188,7 @@ eigen(ginv(E))
 eigen(solve(E))
 
 # 2.4.f
+eigen(E)
 # E의 고유값이 모두 양수이므로 양정치행렬이다
 
 # 2.4.g
