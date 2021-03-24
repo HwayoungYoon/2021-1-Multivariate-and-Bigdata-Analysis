@@ -40,4 +40,43 @@ cond_num
 
 
 #####################################
-##### 
+##### 연습문제 3.1.
+X <- rbind(c(9,1),c(5,3),c(1,4))
+X
+colMeans(X)
+S <- cov(X)
+S
+R <- cor(X)
+R
+
+det(S)
+sum(diag(S))
+
+plot(X[,1], X[,2], pch=19, cex=2, col="pink")
+
+
+#####################################
+##### 연습문제 3.2.
+s1 <- matrix(c(1,0,0,0,1,0,0,0,1), nc=3)
+s2 <- matrix(c(1,0.5,0.5,0.5,1,0.5,0.5,0.5,1), nc=3)
+s1
+s2
+
+# a.
+det(s1)
+det(s2)
+
+# b.
+sum(diag(s1))
+sum(diag(s2))
+
+# c. condition number
+max(eigen(s1)$values)/min(eigen(s1)$values)
+max(eigen(s2)$values)/min(eigen(s2)$values)
+
+
+#####################################
+##### 연습문제 3.3.
+# Y1 = X1+X2+X3
+# Y2 = 2X1-3X2+2X3
+# Y = (Y1,Y2)
