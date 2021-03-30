@@ -124,6 +124,23 @@ win.graph()
 
 
 #####################################
+##### 
+
+# 데이터 입력
+tree <- read.csv("data/tree.csv", header=T)
+cork <- tree[,2:5]
+head(cork)
+
+# 
+summary(cork)
+stem(tree$N)
+boxplot(tree$N, xlab="N")
+qqnorm(tree$N)
+qqline(tree$N)
+chi2.plot(cork)
+
+
+#####################################
 ##### 연습문제 4.3.
 
 # 데이터 입력
@@ -158,17 +175,3 @@ qqnorm(X1, main="Normal Q-Q plot of X1"); qqline(X1)
 qqnorm(X2, main="Normal Q-Q plot of X2"); qqline(X2)
 par(op)
 chi2.plot(Q4)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
