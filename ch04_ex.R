@@ -39,12 +39,6 @@ a <- matrix(c(3,-2,1), nc=1)
 t(a)%*%EX
 t(a)%*%E%*%a
 
-# 4.2.h
-# 4.2.i
-# 4.2.j
-# 4.2.k
-# 4.2.l
-
 # 4.2.m
 eigen(E)
 
@@ -55,7 +49,6 @@ eigen(solve(E))
 ########## 4.3
 E1 <- matrix(c(14,8,3,8,5,2,3,2,1), nc=3)
 E2 <- matrix(c(6,6,1,6,8,2,1,2,1), nc=3)
-E1; E2
 
 # 일반화분산
 det(E1); det(E2)
@@ -95,8 +88,3 @@ chi2.plot <- function(x){
   return(list(xbar, S))
 }
 chi2.plot(KI)
-
-
-########## 4.6
-# 4.6.a
-# 4.6.b
