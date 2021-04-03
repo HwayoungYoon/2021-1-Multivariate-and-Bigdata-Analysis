@@ -39,6 +39,9 @@ a <- matrix(c(3,-2,1), nc=1)
 t(a)%*%EX
 t(a)%*%E%*%a
 
+# 4.2.k
+det(E)
+
 # 4.2.m
 eigen(E)
 
