@@ -61,7 +61,7 @@ xmbar <- colMeans(xm); xmbar
 xfbar <- colMeans(xf); xfbar
 n1 <- nrow(xm); n1
 n2 <- nrow(xf); n2
-S <- ((n1-1)*sm+(n2-1)*sf)/(n1+n2-2)
+S <- ((n1-1)*sm+(n2-1)*sf)/(n1+n2-2); S
 p <- 4
 
 # 두 모집단에 대한 Hotelling T^2 test
@@ -166,7 +166,7 @@ p <- ncol(A[,1:2]); p
 spool <- ((n1-1)*s1+(n2-1)*s2)/(n1+n2-2); spool
 
 library(MASS)
-T2 <- (n1*n2/(n1+n2))*t(ebar-pbar) %*% ginv(spool) %*% (ebar-pbar); spool
+T2 <- (n1*n2/(n1+n2))*t(ebar-pbar) %*% ginv(spool) %*% (ebar-pbar); T2
 f <- ((n1+n2-p-1)/((n1+n2-2)*p))*T2; f
 pvalue <- 1-pf(f, p, n1+n2-p-1); pvalue
 
