@@ -3,7 +3,7 @@ setwd("C:/R/Multivariate and Bigdata Analysis")
 
 
 #####################################
-##### 예제 5.2. Hotelling T^2 test
+##### 예제 5.1. Hotelling T^2 test
 
 # 데이터 입력
 sweat <- read.csv("data/sweat.csv", header=T); sweat
@@ -20,7 +20,7 @@ n <- dim(x)[[1]]; n
 library(MASS)
 mu0 <- c(4,50,10); mu0
 T2 <- n*t(xbar-mu0) %*% ginv(S) %*% (xbar-mu0); T2
-f <- ((n-p)/(n-1)*p)*T2; f
+f <- (n-p)/((n-1)*p)*T2; f
 pvalue <- 1-pf(f, p, n-p); pvalue
 
 # 동시 신뢰영역
@@ -30,6 +30,7 @@ ggplot(sweat, aes(x1,x2)) +
   geom_point() +
   stat_ellipse()
 ## 95%, multivariate n
+ggplot(sweat, aes(x1,x2)) +
   geom_point() +
   stat_ellipse(type="norm")
 ## 90%, multivariate n
@@ -67,9 +68,8 @@ p <- 4
 # 두 모집단에 대한 Hotelling T^2 test
 library(MASS)
 T2 <- t(xmbar-xfbar) %*% ginv((1/n1+1/n2)*S) %*% (xmbar-xfbar); T2
-f <- ((n1+n2-p)/(n1+n2-p-1)*p)*T2; f
+f <- ((n1+n2-p-1)/((n1+n2-2)*p))*T2; f
 pvalue <- 1-pf(f, p, n1+n2-p-1); pvalue
-
 
 #####################################
 ##### 연습문제 5.1. obs (x1, x2)' 2*1 column vector
@@ -95,7 +95,7 @@ sinv <- solve(S); sinv
 # (d). mean vector under H0: mu=mu0
 mu0 <- c(7,11); mu0
 T2 <- n*t(xbar-mu0) %*% solve(S) %*% (xbar-mu0); T2
-f <- ((n-p)/(n-1)*p)*T2; f
+f <- (n-p)/((n-1)*p)*T2; f
 pvalue <- 1-pf(f, p, n-p); pvalue
 pv <- pf(f, p, n-p, lower.tail=F); pv
 
@@ -143,7 +143,7 @@ s2 <- cov(pil); s2
 library(ggplot2)
 ggplot(A, aes(A[,1], A[,2], pch=group)) +
   geom_point() +
-  stat_ellipse(aes(A[,1], A[,2], color=group), type="norm", level=0)
+  stat_ellipse(aes(A[,1], A[,2], color=group), type="norm", level=0.9)
 
 ## another draw
 install.packages("devtools")
