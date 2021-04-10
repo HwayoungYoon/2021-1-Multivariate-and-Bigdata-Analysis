@@ -3,96 +3,96 @@ setwd("C:/R/Multivariate and Bigdata Analysis")
 
 
 ########## 5.1
-x <- rbind(c(2,12), c(8,9), c(6,9), c(8,10)); x
-
-n <- dim(x)[[1]]; n
-p <- dim(x)[[2]]; p
-
-# scatter plot
-plot(x[,1], x[,2], pch=19, cex=2, col="blue")
+X <- as.data.frame(matrix(c(2,8,6,8,12,9,9,10), nc=2))
 
 # 5.1.a
-xbar <- colMeans(x); xbar
+Xbar <- colMeans(X); Xbar
 
 # 5.1.b
-S <- cov(x); S
+S <- cov(X); S
 
 # 5.1.c
-sinv <- solve(S); sinv
+solve(S)
 
-# 5.1.d mean vector under H0: mu=mu0
-mu0 <- c(7,11); mu0
-T2 <- n*t(xbar-mu0) %*% solve(S) %*% (xbar-mu0); T2
-f <- ((n-p)/(n-1)*p)*T2; f
-pvalue <- 1-pf(f, p, n-p); pvalue
-pv <- pf(f, p, n-p, lower.tail=F); pv
+# 5.1.d
+n <- dim(X)[[1]]
+p <- dim(X)[[2]]
+mu0 <- c(7,11)
+T2 <- n*t(Xbar-mu0) %*% solve(S) %*% (Xbar-mu0); T2
+(n-1)*p/(n-p)*qf(0.05, n, n-p, lower.tail=F)
+f <- (n-p)/((n-1)*p)*T2
+1-pf(f, p, n-p)
 
 # 5.1.e
-C <- rbind(c(1,-1), c(1,1)); C
-C %*% x[1,]
-C %*% x[2,]
-C %*% x[3,]
-C %*% x[4,]
-cx <- rbind(t(C %*% x[1,]), t(C %*% x[2,]), 
-            t(C %*% x[3,]), t(C %*% x[4,])); cx
-C %*% t(x)
+C <- matrix(c(1,1,-1,1), nc=2); C
 
-# 5.1.f mean vector under H0
-cmu0 <- C %*% mu0; cmu0
-cxbar <- colMeans(cx); cxbar
-cS <- cov(cx); cS
+# 5.1.f
+cX <- t(C %*% t(X)); cX
 
 # 5.1.g
+cmu0 <- C %*% mu0
+cXbar <- colMeans(cX)
+cS <- cov(cX)
+
 library(MASS)
-cT2 <- n*t(cxbar-cmu0) %*% ginv(cS) %*% (cxbar-cmu0)
+cT2 <- n*t(cXbar-cmu0) %*% ginv(cS) %*% (cXbar-cmu0)
 cT2; T2
-cf <- ((n-p)/(n-1)*p)*cT2; cf
-cpvalue <- 1-pf(cf, p, n-p); cpvalue
 
 # 5.1.h
+library(ggplot2)
+library(devtools)
+library(proto)
+library(plotly)
+p <- ggplot(data=X, aes(x=X[,1], y=X[,2])) +
+  geom_point() +
+  stat_ellipse(geom="polygon", alpha=0.5) +
+  labs(x="Xi1", y="Xi2")
+fig <- ggplotly(p); fig
 
 # 5.1.i
-dist(t(x)[1:2,], method="euclidean")
+dist(t(X)[1:2,], method="euclidean")
 
 
 ########## 5.5
 library(readxl)
-A <- read_xlsx("data/practice/Table5.9_EngineerPilot.xlsx")
-A <- as.data.frame(A); A
-attach(A)
-eng <- A[(group=="E"), 1:2]; eng
-pil <- A[(group=="P"), 1:2]; pil
+EP <- read_xlsx("data/practice/Table5.9_EngineerPilot.xlsx")
+EP <- as.data.frame(EP)
+attach(EP)
+EP.E <- EP[(group=="E"), 1:2]
+EP.P <- EP[(group=="P"), 1:2]
 
 # 5.5.a
-ebar <- colMeans(eng); ebar
-s1 <- cov(eng); s1
-pbar <- colMeans(pil); pbar
-s2 <- cov(pil); s2
+Ebar <- colMeans(EP.E); Ebar
+sE <- cov(EP.E); sE
+Pbar <- colMeans(EP.P); Pbar
+sP <- cov(EP.P); sP
 
 # 5.5.b
-n1 <- nrow(eng); n1
-n2 <- nrow(pil); n2
-p <- ncol(A[,1:2]); p
-spool <- ((n1-1)*s1+(n2-1)*s2)/(n1+n2-2); spool
+nE <- nrow(EP.E)
+nP <- nrow(EP.P)
+p <- ncol(EP[,1:2])
+S <- ((nE-1)*sE+(nP-1)*sP)/(nE+nP-2)
 
 library(MASS)
-T2 <- (n1*n2/(n1+n2))*t(ebar-pbar) %*% ginv(spool) %*% (ebar-pbar); spool
-f <- ((n1+n2-p-1)/((n1+n2-2)*p))*T2; f
-pvalue <- 1-pf(f, p, n1+n2-p-1); pvalue
+T2_1 <- (nE*nP/(nE+nP))*t(Ebar-Pbar) %*% ginv(S) %*% (Ebar-Pbar); T2_1
+(nE+nP-2)*p/(nE+nP-p-1)*qf(0.05, p, nE+nP-p-1, lower.tail=F)
+f <- ((nE+nP-p-1)/((nE+nP-2)*p))*T2_1
+1-pf(f, p, nE+nP-p-1)
 
 # 5.5.c
 library(MASS)
-T2_2 <- t(ebar-pbar) %*% ginv(s1/n1+s2/n2) %*% (ebar-pbar); T2_2
-p.value <- pchisq(T2_2, p, lower.tail=F); p.value
+T2_2 <- t(Ebar-Pbar) %*% ginv(sE/nE+sP/nP) %*% (Ebar-Pbar); T2_2
+qchisq(0.05, p, lower.tail=F)
+pchisq(T2_2, p, lower.tail=F)
 
 
 ########## 5.7
 library(readxl)
 Edata <- read_xlsx("data/practice/Table5.11_EconomyPeriod.xlsx")
-Edata <- as.data.frame(Edata); Edata
+Edata <- as.data.frame(Edata)
 attach(Edata)
-EC <- Edata[(group=="C"), 1:4]; EC
-EP <- Edata[(group=="P"), 1:4]; EP
+EC <- Edata[(group=="C"), 1:4]
+EP <- Edata[(group=="P"), 1:4]
 
 # 5.7.a
 barC <- colMeans(EC); barC
@@ -101,18 +101,20 @@ barP <- colMeans(EP); barP
 SP <- cov(EP); SP
 
 # 5.7.b
-nC <- nrow(EC); nC
-nP <- nrow(EP); nP
+nC <- nrow(EC)
+nP <- nrow(EP)
 S <- ((nC-1)*SC+(nP-1)*SP)/(nC+nP-2); S
 
 # 5.7.c
-n <- ncol(Edata[,1:4]); n
+p <- ncol(Edata[,1:4])
 library(MASS)
 T2_1 <- (nC*nP/(nC+nP))*t(barC-barP) %*% ginv(S) %*% (barC-barP); T2_1
-f1 <- ((nC+nP-n-1)/((nC+nP-2)*n))*T2_1; f1
-p1 <- 1-pf(f1, n, nC+nP-n-1); p1
+(nC+nP-2)*p/(nC+nP-p-1)*qf(0.05, p, nC+nP-p-1, lower.tail=F)
+f <- ((nC+nP-p-1)/((nC+nP-2)*p))*T2_1
+1-pf(f, p, nC+nP-p-1)
 
 # 5.7.d
 library(MASS)
 T2_2 <- t(barC-barP) %*% ginv(SC/nC+SP/nP) %*% (barC-barP); T2_2
-p2 <- pchisq(T2_2, n, lower.tail=F); p2
+qchisq(0.05, p, lower.tail=F)
+pchisq(T2_2, p, lower.tail=F)
