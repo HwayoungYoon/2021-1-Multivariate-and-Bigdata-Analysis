@@ -166,6 +166,7 @@ B <- n1*(m1-m) %*% t(m1-m) + n2*(m2-m) %*% t(m2-m) + n3*(m3-m) %*% t(m3-m); B
 E <- (n1-1)*s1 + (n2-1)*s2 + (n3-1)*s3; E
 test <- solve(E) %*% B
 eigen(test)
+B+E
 
 # another
 ## number of samples
@@ -174,6 +175,7 @@ B <- (n-1)*cov(fit$fitted.values); B
 E <- (n-1)*cov(fit$residuals); E
 test <- solve(E) %*% B
 eigen(test)
+B+E
 
 detach(rabbit)
 
