@@ -85,6 +85,71 @@ p_cov2$loadings
 ## the scores of the principal components for data
 p_cov2$scores
 
+# scatterplot, scree plot and Biplot
+library(lattice)
+splom(ps1, pch="*", main="scatterplot of head sizes")
+splom(ps2, pch="*", main="scatterplot of head sizes")
+
+library(graphics)
+
+screeplot(p_cov1, npcs=4, type="lines", main="scree plot-cov", sub="male")
+biplot(p_cov1, main="principal plot", sub="male")
+
+screeplot(p_cov2, npcs=4, type="lines", main="scree plot-cov", sub="female")
+biplot(p_cov2, main="principal plot", sub="female")
+
+par(mfrow=c(1,2))
+screeplot(p_cov1, npcs=4, type="lines", main="scree plot-cov", sub="male")
+screeplot(p_cov2, npcs=4, type="lines", main="scree plot-cov", sub="female")
+
+par(mfrow=c(1,2))
+biplot(p_cov1, main="principal plot", sub="male")
+biplot(p_cov2, main="principal plot", sub="female")
+
+# For all data male and female
+p_cov <- princomp(ps, cor=F)  # with correlation matrix
+summary(p_cov)
+attributes(p_cov)
+## the standard deviations of the principal component
+p_cov$sdev
+## the matrix of variable loadings
+p_cov$loadings
+## the scores of the principal components for data
+p_cov$scores
+
+all <- cbind(ps, p_cov$scores)
+all
+# sort by the first princomp
+all[order(p_cor$scores[,1]),]
+
+# scatterplot, scree plot and Biplot
+library(lattice)
+splom(ps, pch="*", main="scatterplot of head sizes")
+screeplot(p_cov, npcs=4, type="lines", main="scree plot-correlation")
+biplot(p_cov)
+
+# with covariance matrix : All male and female
+p_cov <- princomp(ps)
+summary(p_cov)
+p_cov$sdev
+p_cov$loadings
+p_cov$scores
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
