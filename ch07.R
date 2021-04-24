@@ -136,23 +136,40 @@ p_cov$loadings
 p_cov$scores
 
 
+#####################################
+##### 연습문제 7.6.
+
+# 표본공분산행렬
+S <- matrix(c(4,2,0,2,9,6,0,6,16), ncol=3)
+S
+eS <- eigen(S); eS
+
+rat1 <- eS$values[[1]]/sum(eS$values); rat1
+rat2 <- eS$values[[2]]/sum(eS$values); rat2
+rat3 <- eS$values[[3]]/sum(eS$values); rat3
 
 
+#####################################
+##### 연습문제 7.7.
 
+library(readxl)
+hema0 <- read_xlsx("data/practice/Table7.5_Blood.xlsx")
+hema0 <- as.data.frame(hema0)
+attach(hema0)
+head(hema0)
 
+hema <- hema0[,2:7]
+p_cor <- princomp(hema, cor=T)
+summary(p_cor)
+attributes(p_cor)
 
+p_cor$sdev
+p_cor$loadings
+p_cor$scores
 
+# 첫 번째 주성분 : 
+# 두 번째 주성분 : 
+# 세 번째 주성분 : 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+library(graphics)
+biplot(p_cor)
