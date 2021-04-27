@@ -28,11 +28,10 @@ p_cor$loadings
 ## the scores of the supplied data on the principal
 p_cor$scores
 
-all <- cbind(son, p_cor$scores)
-all
-## sort by first pc
+all <- cbind(son, p_cor$scores); all
+## sort by first princomp
 all[order(p_cor$scores[,1]),]
-## sort by second pc
+## sort by second princomp
 all[order(p_cor$scores[,2]),]
 
 # scatterplot, scree plot and Biplot
@@ -55,7 +54,7 @@ p_cov$scores
 
 # 데이터 입력
 pschy <- read.csv("data/pschy.csv", header=T)
-pschy
+head(pschy)
 attach(pschy)
 
 # except gender column
@@ -91,7 +90,6 @@ splom(ps1, pch="*", main="scatterplot of head sizes")
 splom(ps2, pch="*", main="scatterplot of head sizes")
 
 library(graphics)
-
 screeplot(p_cov1, npcs=4, type="lines", main="scree plot-cov", sub="male")
 biplot(p_cov1, main="principal plot", sub="male")
 
@@ -117,12 +115,12 @@ p_cov$loadings
 ## the scores of the principal components for data
 p_cov$scores
 
-all <- cbind(ps, p_cov$scores)
-all
+all <- cbind(ps, p_cov$scores); all
 # sort by the first princomp
 all[order(p_cor$scores[,1]),]
 
 # scatterplot, scree plot and Biplot
+par(mfrow=c(1,1))
 library(lattice)
 splom(ps, pch="*", main="scatterplot of head sizes")
 screeplot(p_cov, npcs=4, type="lines", main="scree plot-correlation")
@@ -140,8 +138,7 @@ p_cov$scores
 ##### 연습문제 7.6.
 
 # 표본공분산행렬
-S <- matrix(c(4,2,0,2,9,6,0,6,16), ncol=3)
-S
+S <- matrix(c(4,2,0,2,9,6,0,6,16), ncol=3); S
 eS <- eigen(S); eS
 
 rat1 <- eS$values[[1]]/sum(eS$values); rat1
@@ -150,7 +147,7 @@ rat3 <- eS$values[[3]]/sum(eS$values); rat3
 
 
 #####################################
-##### 연습문제 7.7.
+##### 연습문제 7.11.
 
 library(readxl)
 hema0 <- read_xlsx("data/practice/Table7.5_Blood.xlsx")
