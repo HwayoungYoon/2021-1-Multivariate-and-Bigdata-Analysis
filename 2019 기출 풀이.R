@@ -117,3 +117,17 @@ mu <- colMeans(rab[,2:3]); mu
 Sigma <- cov(rab[,2:3])
 S <- sqrt(solve(Sigma))
 S %*% t(rab[1,2:3]-mu)
+
+
+#####################################
+##### 3번
+
+# 3.10 : 일반화분산
+S1 <- matrix(c(14,8,3,8,5,2,3,2,1), nc=3)
+S2 <- matrix(c(6,6,1,6,8,2,1,2,1), nc=3)
+det(S1)
+det(S2)
+
+# 3.11 : 총분산
+sum(diag(S1))
+sum(diag(S2))
