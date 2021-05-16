@@ -2,7 +2,7 @@
 setwd("C:/R/Multivariate and Bigdata Analysis")
 
 
-########## 6.6
+########## 8.8
 library(readxl)
 Diabetes <- read_xlsx("data/practice/Table9.2_Diabetes.xlsx")
 Diabetes <- as.data.frame(Diabetes)
