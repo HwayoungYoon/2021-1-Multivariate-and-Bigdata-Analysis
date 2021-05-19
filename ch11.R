@@ -49,12 +49,64 @@ for (i in 1:7){
 ##### 예제 11.4 프로그램 11.1
 
 # 데이터 입력
+crime <- read.csv("data/crime.csv", header=T); crime
+attach(crime)
 
+# Clusterwise statistics
+ccent <- function(y, cl){
+    f <- function(i){ colMeans(y[cl==i,]) }
+    x <- sapply(sort(unique(cl)), f)
+    colnames(x) <- sort(unique(cl))
+  return(x)
+}
 
+# Hierarchical cluster analysis
+## ?hclust
+x <- crime[,3:4]
 
+## distance matrix
+dx <- round(dist(x), digits=2); dx
+D2 <- dist(x, method="manhattan"); D2
 
+hc1 <- hclust(dist(x)^2, method="single")
+plot(hc1, labels=city, hang=-1, main="Dandrogram:Single Linkage")
+hc2 <- hclust(dist(x)^2, method="complete")
+plot(hc2, labels=city, hang=-1, main="Complete Linkage")
+hc3 <- hclust(dist(x)^2, method="ward.D")
+plot(hc3, labels=city, hang=-1, main="Ward Method")
+hc4 <- hclust(dist(x)^2, method="average")
+plot(hc4, labels=city, hang=-1, main="Average Linkage")
 
+cl.num <- 3
+colnames(x) <- c("murder","rape")
 
+win.graph()
+hc1.result <- cutree(hc1, k=cl.num); hc1.result
+plot(x, pch=hc1.result, main="single")
+text(x, labels=city, adj=0, cex=0.5)
+ccent(x, hc1.result)
+
+win.graph()
+hc2.result <- cutree(hc2, k=cl.num); hc2.result
+plot(x, pch=hc2.result, main="complete")
+text(x, labels=city, adj=0, cex=0.5)
+ccent(x, hc2.result)
+
+win.graph()
+hc3.result <- cutree(hc3, k=cl.num); hc3.result
+plot(x, pch=hc3.result, main="Ward")
+text(x, labels=city, adj=0, cex=0.5)
+ccent(x, hc3.result)
+
+a <- cbind(crime, hc3.result); a
+## cluster 1
+c1.1 <- a[(a$hc3.result==1),]; c1.1
+## cluster 2
+c1.2 <- a[(a$hc3.result==2),]; c1.2
+## cluster 3
+c1.3 <- a[(a$hc3.result==3),]; c1.3
+
+# K-means clustering
 
 
 
