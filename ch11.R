@@ -52,7 +52,7 @@ for (i in 1:7){
 crime <- read.csv("data/crime.csv", header=T); crime
 attach(crime)
 
-# Clusterwise statistics
+########## Clusterwise statistics
 ccent <- function(y, cl){
     f <- function(i){ colMeans(y[cl==i,]) }
     x <- sapply(sort(unique(cl)), f)
@@ -60,14 +60,15 @@ ccent <- function(y, cl){
   return(x)
 }
 
-# Hierarchical cluster analysis
-## ?hclust
+########## Hierarchical cluster analysis
+# ?hclust
 x <- crime[,3:4]
 
-## distance matrix
+# distance matrix
 dx <- round(dist(x), digits=2); dx
 D2 <- dist(x, method="manhattan"); D2
 
+par(mfrow=c(1,1))
 hc1 <- hclust(dist(x)^2, method="single")
 plot(hc1, labels=city, hang=-1, main="Dandrogram:Single Linkage")
 hc2 <- hclust(dist(x)^2, method="complete")
@@ -99,26 +100,56 @@ text(x, labels=city, adj=0, cex=0.5)
 ccent(x, hc3.result)
 
 a <- cbind(crime, hc3.result); a
-## cluster 1
+# cluster 1
 c1.1 <- a[(a$hc3.result==1),]; c1.1
-## cluster 2
+# cluster 2
 c1.2 <- a[(a$hc3.result==2),]; c1.2
-## cluster 3
+# cluster 3
 c1.3 <- a[(a$hc3.result==3),]; c1.3
 
-# K-means clustering
+########## K-means clustering
+# ?kmeans
+crime_k <- kmeans(x, centers=3)
+attributes(crime_k)
+crime_k$cluster
+crime_k$centers
 
+########## Grouping
+clus <- cbind(city, x, crime_k$cluster); clus
+clus1 <- clus[(clus[,4]==1),]; clus1
+clus2 <- clus[(clus[,4]==2),]; clus2
+clus3 <- clus[(clus[,4]==3),]; clus3
 
+# number of each cluster
+kc <- table(crime_k$cluster); kc
+plot(x, pch=crime_k$cluster, col=crime_k$cluster, main="K-means cluster")
+  text(x, labels=city, adj=0, cex=0.5)
 
+# clusterwise info
+ccent(x, crime_k$cluster)
 
+install.packages("mclust")
+library(mclust)
+clPairs(x, classification=crime_k$cluster, symbols=1:3)
 
+########## Model-based clustering
+library(mclust)
+crime_mc <- Mclust(x, 2:5); crime_mc
+crime_mc <- Mclust(x, G=3); crime_mc
+attributes(crime_mc)
+crime_mc$classification
 
+ccent(x, crime_mc$classification)
 
+# number of each cluster
+mc <- table(crime_mc$classification); mc
 
+plot(x, pch=crime_mc$classification, col=crime_mc$classification, main="Model-based clustering")
+  text(x, labels=city, adj=0, cex=0.5)
 
-
-
-
-
-
-
+win.graph()
+par(mfrow=c(2,2))
+plot(crime_mc, what="BIC")
+plot(crime_mc, what="classification")
+plot(crime_mc, what="uncertainty")
+plot(crime_mc, what="density")
