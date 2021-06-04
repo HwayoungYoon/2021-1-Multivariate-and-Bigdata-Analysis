@@ -89,39 +89,73 @@ confusionMatrix(party_titanic_pre, titanic_test$Survived)
 
 #####################################
 ##### Kyphosis
+# Classification Tree with rpart
+library(rpart)
+data("kyphosis")
+head(kyphosis)
+str(kyphosis)
+attach(kyphosis)
+table(Kyphosis)
+
+# grow tree
+fit <- rpart(Kyphosis ~ Age+Number+Start, method="class", data=kyphosis)
+## display the result
+printcp(fit)
+## visualize cross-validation results
+plotcp(fit)
+## detailed summary of splits
+summary(fit)
+
+# plot tree
+plot(fit, uniform=T, main="Classification Tree for Kyphosis")
+text(fit, use.n=T, cox=0.8)
+
+# treee with prob
+install.packages("partykit")
+library(partykit)
+rparty.tree <- as.party(fit)
+rparty.tree
+plot(rparty.tree)
 
 
+#####################################
+##### Random Forest
+install.packages("randomForest")
+library(randomForest)
 
+train.idx <- sample(1:nrow(kyphosis), 50)
+train.set <- kyphosis[train.idx,]
+test.set <- kyphosis[-train.idx,]
 
+r <- randomForest(Kyphosis ~ Age+Number+Start, data=train.set, 
+                  importance=T, do.trace=100, ntree=100)
+print(r)
+plot(r)
 
+predictions <- predict(r, test.set)
+table(test.set$Kyphosis, predictions)
 
+par(mfrow=c(3,2))
+partialPlot(r, train.set, Age, "absent", sub="absent")
+partialPlot(r, train.set, Age, "present", sub="present")
+partialPlot(r, train.set, Number, "absent", sub="absent")
+partialPlot(r, train.set, Number, "present", sub="present")
+partialPlot(r, train.set, Start, "absent", sub="absent")
+partialPlot(r, train.set, Start, "present", sub="present")
+par(mfrow=c(1,1))
 
+treesize(r)
+hist(treesize(r))
 
+attributes(r)
+# getTree(r, 1, labelVar=T)
 
+library(devtools)
+devtools::install_github("skinner927/reprtree")
 
+library(reprtree)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# random forest best model tree diagram
+reprtree:::plot.getTree(r)
 
 
