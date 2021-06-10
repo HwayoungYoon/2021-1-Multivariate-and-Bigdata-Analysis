@@ -117,6 +117,29 @@ effect_plot(reg.mod, pred = prevention.pollution, interval = TRUE, partial.resid
 remove <- c("621")
 Eco_data.out <- Eco_data[!row.names(Eco_data)%in%remove,]
 
+#################### full model
+regression.fout <- lm(environmental.issues ~ sex.re+age+address+house.type+
+                        health+stress+family.relationship+previous.environment+
+                        post.environment+environmental.cost+study+income+
+                        restrictions+social.safety+environment.feel+
+                        prevention.pollution+sex.re:house.type+sex.re:address+
+                        address:house.type, data=Eco_data.out)
+summary(regression.fout)
+tab_model(regression.fout, show.se=TRUE, show.fstat=TRUE, auto.label=TRUE)
+
+# mctest 패키지 : 다중공선성 진단
+library(mctest)
+mc.plot(regression.fout)
+imcdiag(regression.fout)
+
+# 표준화 계수값
+tab_model(regression.fout, show.se=TRUE, show.std=TRUE, auto.label=TRUE)
+
+# 변수선택
+# 선택제거
+step3out <- step(regression.fout, direction="both")
+summary(step3out)
+
 
 ##########################################################################
 
