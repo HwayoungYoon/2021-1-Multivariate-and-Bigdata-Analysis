@@ -140,6 +140,42 @@ tab_model(regression.fout, show.se=TRUE, show.std=TRUE, auto.label=TRUE)
 step3out <- step(regression.fout, direction="both")
 summary(step3out)
 
+#################### 변수선택 결과 모형
+reg.mod2 <- lm(environmental.issues ~ sex.re + age + address + 
+                 house.type + stress + family.relationship + 
+                 previous.environment + post.environment + 
+                 environmental.cost + study + income + social.safety + 
+                 environment.feel + prevention.pollution, data = Eco_data.out)
+summary(reg.mod2)
+tab_model(reg.mod2, show.se=TRUE, show.fstat=TRUE, auto.label=TRUE)
+
+# 잔차분석
+# 더빈왓슨통계량 : 잔차의 독립성
+library(car)
+durbinWatsonTest(reg.mod2)
+
+id2 <- c(1:nrow(Eco_data.out))
+resid2 <- rstandard(reg.mod2)
+par(mfrow=c(1,1))
+plot(id2, resid2, main="잔차의 독립성", ylab="표준화잔차",pch=21)
+
+# 잔차그림 : 오차의 정규성 및 이상점, 영향점
+pred2 <- predict(reg.mod2)
+plot(pred2, resid2, main="잔차 vs 적합값", pch=21, col="red", 
+     ylab="표준화잔차", xlab="적합값")
+abline(0,0)
+
+library(sjPlot)
+plot_residuals(reg.mod2)
+
+par(mfrow=c(3,2))
+for(i in 1:5) plot(reg.mod2, i)
+par(mfrow=c(1,1))
+
+# 이상점 제거
+remove2 <- c("1020","822")
+Eco_data.out2 <- Eco_data.out[!row.names(Eco_data.out)%in%remove2,]
+
 
 ##########################################################################
 
