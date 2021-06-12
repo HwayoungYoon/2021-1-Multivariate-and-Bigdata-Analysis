@@ -176,6 +176,69 @@ par(mfrow=c(1,1))
 remove2 <- c("1020","822")
 Eco_data.out2 <- Eco_data.out[!row.names(Eco_data.out)%in%remove2,]
 
+#################### full model
+regression.fout2 <- lm(environmental.issues ~ sex.re+age+address+house.type+
+                         health+stress+family.relationship+previous.environment+
+                         post.environment+environmental.cost+study+income+
+                         restrictions+social.safety+environment.feel+
+                         prevention.pollution+sex.re:house.type+sex.re:address+
+                         address:house.type, data=Eco_data.out2)
+summary(regression.fout2)
+tab_model(regression.fout2, show.se=TRUE, show.fstat=TRUE, auto.label=TRUE)
+
+# mctest 패키지 : 다중공선성 진단
+library(mctest)
+mc.plot(regression.fout2)
+imcdiag(regression.fout2)
+
+# 표준화 계수값
+tab_model(regression.fout2, show.se=TRUE, show.std=TRUE, auto.label=TRUE)
+
+# 변수선택
+# 선택제거
+step3out2 <- step(regression.fout2, direction="both")
+summary(step3out2)
+
+# 변수선택 결과 모형
+reg.mod4 <- lm(environmental.issues ~ sex.re + age + address + 
+                 house.type + stress + family.relationship + 
+                 previous.environment + post.environment + 
+                 environmental.cost + study + income + social.safety + 
+                 environment.feel + prevention.pollution, data = Eco_data.out2)
+summary(reg.mod4)
+tab_model(reg.mod4, show.se=TRUE, show.fstat=TRUE, auto.label=TRUE)
+
+# mctest 패키지 : 다중공선성 진단
+library(mctest)
+mc.plot(reg.mod4)
+imcdiag(reg.mod4)
+
+# 표준화 계수값
+tab_model(reg.mod4, show.se=TRUE, show.std=TRUE, auto.label=TRUE)
+
+# 잔차분석
+# 더빈왓슨통계량 : 잔차의 독립성
+library(car)
+durbinWatsonTest(reg.mod4)
+
+id4 <- c(1:nrow(Eco_data.out2))
+resid4 <- rstandard(reg.mod4)
+par(mfrow=c(1,1))
+plot(id4, resid4, main="잔차의 독립성", ylab="표준화잔차",pch=21)
+
+# 잔차그림 : 오차의 정규성 및 이상점, 영향점
+pred4 <- predict(reg.mod4)
+plot(pred4, resid4, main="잔차 vs 적합값", pch=21, col="red", 
+     ylab="표준화잔차", xlab="적합값")
+abline(0,0)
+
+library(sjPlot)
+plot_residuals(reg.mod4)
+
+par(mfrow=c(3,2))
+for(i in 1:5) plot(reg.mod4, i)
+par(mfrow=c(1,1))
+
 
 ##########################################################################
 
