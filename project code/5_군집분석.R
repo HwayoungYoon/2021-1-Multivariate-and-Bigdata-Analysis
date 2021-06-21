@@ -82,8 +82,49 @@ plot(t(Eco_cont), pch=crime_mc$classification, col=crime_mc$classification,
 text(t(Eco_cont), labels=colnames(Eco_cont), adj=0, cex=0.7)
 
 
+#################### 전체 Eco_data에 대한 군집분석
+# 데이터 정리
+Eco <- Eco_data[,c(1,2,10,15,39,47:49,65,66,69,75,76,78:81)]
+attach(Eco)
+
+# 군집 개수 결정
+twss <- NULL
+for (i in 1:10) {
+  kc <- kmeans(Eco, i)
+  twss <- c(twss, kc$tot.withinss)
+}
+win.graph()
+plot(1:10, twss, type="b", xlab="군집수", ylab="TWSS", xaxt="n")
+axis(side=1,at=c(1:10))
+
+# K-means 군집분석
+km <- kmeans(Eco, 2); km
+library(factoextra)
+win.graph()
+fviz_cluster(km, data=Eco, geom="point")
+
+# K-means 군집별 boxplot
+win.graph()
+par(mfrow=c(3,2))
+par(mar=c(3.1,4.1,2.1,2.1))
+boxplot(environmental.issues ~ km$cluster, ylab="cluster", xlab="", main="environmental.issues", horizontal=T, col=c("lightgray","gray"))
+boxplot(previous.environment ~ km$cluster, ylab="cluster", xlab="", main="previous.environment", horizontal=T, col=c("lightgray","gray"))
+boxplot(post.environment ~ km$cluster, ylab="cluster", xlab="", main="post.environment", horizontal=T, col=c("lightgray","gray"))
+boxplot(environmental.cost ~ km$cluster, ylab="cluster", xlab="", main="environmental.cost", horizontal=T, col=c("lightgray","gray"))
+boxplot(environment.feel ~ km$cluster, ylab="cluster", xlab="", main="environment.feel", horizontal=T, col=c("lightgray","gray"))
+boxplot(prevention.pollution ~ km$cluster, ylab="cluster", xlab="", main="prevention.pollution", horizontal=T, col=c("lightgray","gray"))
+
+# 모형기반 군집분석
+library(mclust)
+crime_mc <- Mclust(Eco, 2:13); crime_mc
+table(crime_mc$classification)
+win.graph()
+plot(crime_mc, what="classification", col=c("pink","lightblue"))
+
+
 ##########################################################################
 
 # 데이터 저장하기
 save(Eco_data, file="Eco_data.RData")
 save(Eco_cont, file="Eco_cont.RData")
+save(Eco, file="Eco.RData")
